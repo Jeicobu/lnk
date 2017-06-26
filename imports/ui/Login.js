@@ -1,13 +1,35 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {Meteor} from 'meteor/meteor';
 
 export default class Login extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: ''
+        };
+    }
+    onSubmit(e) {
+        e.preventDefault();
+
+        let email = this.refs.email.value.trim();
+        let password = this.refs.email.value.trim();
+
+        Meteor.loginWithPassword({email}, password, (err) => {
+            console.log('Login callback', err);
+        });
+    }
     render() {
         return (
             <div>
-                <div>Login</div>
-                login form
-                <Link to="/signup">Have an account?</Link>
+                <h1>Short Lnk</h1>
+                {this.state.error ? <div>{this.state.error}</div> : undefined}
+                <form onSubmit={this.onSubmit.bind(this)}>
+                    <input type="email" ref="email" name="email" placeholder="Email"/>
+                    <input type="password" ref="password" name="password" placeholder="Password"/>
+                    <button>Login</button>
+                </form>
+                <Link to="/signup">Dont have an account?</Link>
             </div>
         );
     }
